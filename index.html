@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ ElectroStore Pro | Next-Gen Appliances</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-bolt logo-icon"></i>
+            ELECTRO<span>STORE</span>
+        </div>
+        
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#" onclick="showPage('home')">Home</a></li>
+            <li><a href="#" onclick="showPage('about')">About</a></li>
+            <li><a href="#" onclick="showPage('products')">Products</a></li>
+            <li><a href="#" onclick="showPage('login')">Login</a></li>
+            <li><a href="#" onclick="showPage('register')" class="reg-btn">Register</a></li>
+            <li>
+                <a href="#" onclick="showPage('cart')" class="cart-link">
+                    <i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span>)
+                </a>
+            </li>
+        </ul>
+
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <div id="content">
+        <section id="home" class="page active hero-section">
+            <div class="hero-content">
+                <span class="hero-subtitle">Premium Home Appliances</span>
+                <h1>Upgrade Your Living with <span class="highlight">Smart Technology</span></h1>
+                <p>Explore our exclusive collection of next-generation electrical solutions. Built for efficiency, designed for modern homes.</p>
+                <div class="hero-btns">
+                    <button class="cta-btn main-btn" onclick="showPage('products')">Shop Collection</button>
+                    <button class="cta-btn secondary-btn" onclick="showPage('about')">Learn More</button>
+                </div>
+            </div>
+            <div class="hero-graphic"></div>
+        </section>
+
+        <section id="about" class="page">
+            <div class="container-text">
+                <h2>About Us</h2>
+                <p>ElectroStore is a leader in providing high-quality electrical appliances. We focus on innovation and customer satisfaction to make your home smarter.</p>
+            </div>
+        </section>
+
+        <section id="products" class="page">
+            <div class="section-header">
+                <h2>Our Collection</h2>
+                <input type="text" id="searchInput" placeholder="Search for appliances..." onkeyup="filterProducts()">
+            </div>
+            <div class="product-grid" id="productGrid"></div>
+        </section>
+
+        <section id="login" class="page">
+            <div class="auth-card">
+                <h2>Login</h2>
+                <input type="text" placeholder="Username or Email">
+                <input type="password" placeholder="Password">
+                <button class="cta-btn">Sign In</button>
+            </div>
+        </section>
+
+        <section id="register" class="page">
+            <div class="auth-card">
+                <h2>Create Account</h2>
+                <input type="text" placeholder="Full Name">
+                <input type="email" placeholder="Email Address">
+                <input type="password" placeholder="Password">
+                <button class="cta-btn">Register</button>
+            </div>
+        </section>
+
+        <section id="cart" class="page">
+            <h2>Your Shopping Cart</h2>
+            <div id="cart-items" class="cart-list"></div>
+            <div class="cart-footer">
+                <h3>Total: $<span id="total-price">0</span></h3>
+                <button class="cta-btn" style="width: 100%; margin-top: 20px;">Proceed to Checkout</button>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <h3>ELECTRO<span>STORE</span></h3>
+            <p>Destinacioni juaj numër një për teknologjinë më të fundit dhe pajisjet shtëpiake inteligjente.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="#" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" onclick="showPage('products')">Products</a></li>
+                <li><a href="#" onclick="showPage('about')">About Us</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Contact Info</h4>
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>+383 44 123 456</span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>info@electrostore.com</span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Prishtinë, Kosovë</span>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 ElectroSTORE | All Rights Reserved</p>
+    </div>
+</footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
