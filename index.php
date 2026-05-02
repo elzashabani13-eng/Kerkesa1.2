@@ -1,79 +1,79 @@
 <?php
-require_once __DIR__ . "/config/config.php";
+require_once "classes/Product.php";
+require_once "classes/News.php";
+require_once "classes/Slider.php";
 
-$sliders = [];
-$r = $conn->query("SELECT * FROM sliders WHERE is_active=1 ORDER BY sort_order ASC, id DESC");
-while ($row = $r->fetch_assoc()) $sliders[] = $row;
+$productObj = new Product();
+$newsObj = new News();
+$sliderObj = new Slider();
 
-$products = [];
-$r2 = $conn->query("SELECT * FROM products WHERE is_active=1 ORDER BY id DESC LIMIT 12");
-while ($row = $r2->fetch_assoc()) $products[] = $row;
+$products = $productObj->getAll();
+$newsList = $newsObj->getAll();
+$slides = $sliderObj->getAll();
 ?>
-<!doctype html>
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>ElectroStore</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroStore | Home</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="dark-theme">
 
-  <header>
-    <nav>
-      <a href="index.php">Home</a>
-      <a href="products.php">Products</a>
-      <a href="cart.php">Cart</a>
-
-      <?php if (!isset($_SESSION['user_id'])): ?>
-        <a href="auth/login.php">Login</a>
-        <a href="auth/register.php">Register</a>
-      <?php else: ?>
-        <span>Hi, <?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
-        <a href="auth/logout.php">Logout</a>
-        <?php if (($_SESSION['role'] ?? '') === 'admin'): ?>
-          <a href="admin/dashboard.php">Dashboard</a>
-        <?php endif; ?>
-      <?php endif; ?>
-    </nav>
-  </header>
-
-  <section>
-    <?php foreach ($sliders as $s): ?>
-      <div style="border:1px solid #ddd; margin:10px; padding:10px;">
-        <img src="public/<?php echo htmlspecialchars($s['image_path']); ?>" style="max-width:100%;height:auto;">
-        <h2><?php echo htmlspecialchars($s['title']); ?></h2>
-        <?php if ($s['subtitle']): ?><p><?php echo htmlspecialchars($s['subtitle']); ?></p><?php endif; ?>
-      </div>
-    <?php endforeach; ?>
-  </section>
-
-  <section>
-    <h2>Featured</h2>
-    <div style="display:flex;flex-wrap:wrap;gap:16px;">
-      <?php foreach ($products as $p): ?>
-        <div style="width:240px;border:1px solid #ddd;padding:10px;">
-          <?php if ($p['image_path']): ?>
-            <img src="public/<?php echo htmlspecialchars($p['image_path']); ?>" style="max-width:100%;height:160px;object-fit:contain;">
-          <?php endif; ?>
-          <h3><?php echo htmlspecialchars($p['name']); ?></h3>
-          <p><b>$<?php echo htmlspecialchars($p['price']); ?></b></p>
-          <a href="#" onclick="addToCart(<?php echo (int)$p['id']; ?>); return false;">Add to Cart</a>
+    <nav class="navbar">
+        <div class="logo"><i class="fas fa-bolt"></i> ELECTRO <span>STORE</span></div>
+        <ul class="nav-links">
+            <li><a href="index.php">Home</a></li>
+            <li><a href="about.php">About</a></li>
+            <li><a href="products.php">Products</a></li>
+            <li><a href="news.php">News</a></li>
+            <li><a href="contact.php">Contact</a></li>
+        </ul>
+        <div class="nav-auth">
+            <a href="login.php" class="btn-login">Login</a>
+            <a href="register.php" class="btn-register">Register</a>
+            <a href="#" class="cart-icon"><i class="fas fa-shopping-cart"></i> (0)</a>
         </div>
-      <?php endforeach; ?>
-    </div>
-  </section>
+    </nav>
 
-<script>
-async function addToCart(productId){
-  const res = await fetch('api/cart.php?action=add', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({product_id: productId, qty: 1})
-  });
-  const data = await res.json();
-  alert(data.message || 'Added');
-}
-</script>
+    <header class="hero">
+        <div class="hero-content">
+            <span class="subtitle">PREMIUM HOME APPLIANCES</span>
+            <h1>Upgrade Your Living with <span>Smart Technology</span></h1>
+            <p>Explore our exclusive collection of next-generation electrical solutions.</p>
+            <div class="hero-btns">
+                <a href="products.php" class="btn-shop">Shop Collection</a>
+                <a href="about.php" class="btn-learn">Learn More</a>
+            </div>
+        </div>
+    </header>
 
+    <section class="products-section">
+        <div class="section-title"><h2>Our Products</h2></div>
+        <div class="product-grid">
+            <?php if(!empty($products)): ?>
+                <?php foreach($products as $p): ?>
+                    <div class="product-card">
+                        <div class="product-img">
+                            <!-- RREGULLIMI: src="uploads/..." sepse nuk ke nenfolder -->
+                            <img src="uploads/<?= $p['image'] ?>" alt="<?= $p['title'] ?>">
+                        </div>
+                        <div class="product-info">
+                            <h3><?= $p['title'] ?></h3>
+                            <p class="price">$<?= $p['price'] ?></p>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No products found.</p>
+            <?php endif; ?>
+        </div>
+    </section>
+
+    <script src="assets/script.js"></script>
 </body>
 </html>
