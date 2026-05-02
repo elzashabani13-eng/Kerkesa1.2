@@ -58,7 +58,6 @@ $slides = $sliderObj->getAll();
                 <?php foreach($products as $p): ?>
                     <div class="product-card">
                         <div class="product-img">
-                            <!-- RREGULLIMI: src="uploads/..." sepse nuk ke nenfolder -->
                             <img src="uploads/<?= $p['image'] ?>" alt="<?= $p['title'] ?>">
                         </div>
                         <div class="product-info">
