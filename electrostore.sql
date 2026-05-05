@@ -1,31 +1,11 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: May 04, 2026 at 01:09 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `electrostore`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `messages`
---
 
 CREATE TABLE `messages` (
   `id` int(11) NOT NULL,
@@ -35,10 +15,7 @@ CREATE TABLE `messages` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `news`
 --
 
 CREATE TABLE `news` (
@@ -49,20 +26,13 @@ CREATE TABLE `news` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `news`
---
 
 INSERT INTO `news` (`id`, `title`, `content`, `image`, `created_at`) VALUES
 (1, 'Teknologjia e Re OLED', 'Zbuloni modelet më të reja të televizorëve OLED që po ndryshojnë tregun.', 'emri_i_fotos_tende.avif', '2026-05-02 18:39:13'),
 (2, 'Smart Home Revolucioni', 'Si pajisjet inteligjente po e bëjnë jetën tonë më të lehtë dhe më të sigurt.', 'news2.jpg', '2026-05-02 18:39:13'),
 (3, 'Kursimi i Energjisë', 'Pajisjet shtëpiake që harxhojnë më pak energji dhe mbrojnë ambientin.', 'news3.jpg', '2026-05-02 18:39:13');
 
--- --------------------------------------------------------
 
---
--- Table structure for table `products`
---
 
 CREATE TABLE `products` (
   `id` int(11) NOT NULL,
@@ -74,9 +44,6 @@ CREATE TABLE `products` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `products`
---
 
 INSERT INTO `products` (`id`, `title`, `description`, `price`, `image`, `created_by`, `created_at`) VALUES
 (1, 'Smart Refrigerator', 'Frigorifer inteligjent me teknologjinë më të fundit.', 899.00, 'Smart Refrigerator.avif', 1, '2026-05-02 18:39:14'),
@@ -99,11 +66,7 @@ INSERT INTO `products` (`id`, `title`, `description`, `price`, `image`, `created
 (18, 'Hair Dryer', 'Tharëse flokësh me mbrojtje ndaj nxehtësisë.', 40.00, 'Hair Dryer.avif', 1, '2026-05-02 18:39:14'),
 (19, 'Electric Kettle', 'Ibrik elektrik për ngrohjen e shpejtë të ujit.', 35.00, 'Electric Kettle.avif', 1, '2026-05-02 18:39:14');
 
--- --------------------------------------------------------
 
---
--- Table structure for table `slider`
---
 
 CREATE TABLE `slider` (
   `id` int(11) NOT NULL,
@@ -111,11 +74,7 @@ CREATE TABLE `slider` (
   `image` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `users`
---
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
@@ -126,95 +85,59 @@ CREATE TABLE `users` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `users`
---
+
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `created_at`) VALUES
 (1, 'admin', 'admin@electrostore.com', 'admin123', 'admin', '2026-05-02 18:39:13'),
 (2, 'user', 'user@gmail.com', 'user123', 'user', '2026-05-04 07:07:10');
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `messages`
---
+
 ALTER TABLE `messages`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `news`
---
+
 ALTER TABLE `news`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `products`
---
+
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_products_user` (`created_by`);
 
---
--- Indexes for table `slider`
---
+
 ALTER TABLE `slider`
   ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `users`
---
+
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `messages`
---
+
+
 ALTER TABLE `messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `news`
---
+
 ALTER TABLE `news`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
---
--- AUTO_INCREMENT for table `products`
---
+
 ALTER TABLE `products`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
---
--- AUTO_INCREMENT for table `slider`
---
+
 ALTER TABLE `slider`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT for table `users`
---
+
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
---
--- Constraints for dumped tables
---
 
---
--- Constraints for table `products`
---
 ALTER TABLE `products`
   ADD CONSTRAINT `fk_products_user` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
