@@ -1,10 +1,20 @@
 <?php
-
 session_start();
+require_once "../classes/Product.php";
 
-require_once "classes/Product.php";
+if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+    header("Location: ../login.php");
+    exit;
+}
 
 $productObj = new Product();
+
+if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
+    $productObj->delete($_GET['id']);
+    header("Location: products.php");
+    exit;
+}
+
 $products = $productObj->getAll();
 ?>
 
@@ -12,141 +22,89 @@ $products = $productObj->getAll();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products | ElectroStore</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <title>Admin | Manage Products</title>
+    <link rel="stylesheet" href="../assets/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <style>
-        body {
-            background-color: #0b0c10;
-            color: white;
-            font-family: 'Arial', sans-serif;
+        body { background: #0b0c10; color: white; padding: 20px; font-family: Arial, sans-serif; }
+        .container { max-width: 1200px; margin: auto; }
+        
+        .admin-nav { 
+            background: #1f2833; 
+            padding: 15px 25px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 2px solid #66fcf1;
         }
+        .admin-nav a { color: #66fcf1; text-decoration: none; font-weight: bold; margin-right: 20px; }
+        .admin-nav .logout-btn { color: #ff4d4d; }
 
-        .products-container {
-            padding: 100px 7%;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .product-card {
-            background: #1f2833;
-            border: 1px solid #45a29e;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            transition: 0.3s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(102, 252, 241, 0.2);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 200px;
-            object-fit: contain;
-            margin-bottom: 15px;
-            border-radius: 10px;
-        }
-
-        .product-title {
-            font-size: 1.2rem;
-            color: #66fcf1;
-            margin-bottom: 10px;
-        }
-
-        .product-price {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .add-cart-btn {
-            background-color: #66fcf1;
-            color: #0b0c10;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            text-decoration: none;
-            display: inline-block;
-            transition: 0.3s;
-        }
-
-        .add-cart-btn:hover {
-            background-color: #45a29e;
-        }
-
-        .cart-icon-nav {
-            position: relative;
-        }
-
-        .cart-count {
-            position: absolute;
-            top: -10px;
-            right: -15px;
-            background: #66fcf1;
-            color: #0b0c10;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 0.7rem;
-            font-weight: bold;
-        }
+        table { width: 100%; border-collapse: collapse; background: #1f2833; margin-top: 20px; border-radius: 10px; overflow: hidden; }
+        th, td { padding: 15px; border: 1px solid #45a29e; text-align: left; }
+        th { background: #45a29e; color: #0b0c10; }
+        tr:hover { background: #2b3a4a; }
+        
+        .btn-add { background: #66fcf1; color: #0b0c10; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .action-links a { text-decoration: none; font-weight: bold; margin-right: 10px; }
+        .edit { color: #66fcf1; }
+        .delete { color: #ff4d4d; }
+        img { border-radius: 5px; object-fit: cover; border: 1px solid #45a29e; }
     </style>
 </head>
 <body>
 
-   
-    <nav class="navbar">
-        <div class="logo"><i class="fas fa-bolt"></i> ELECTRO <span>STORE</span></div>
-        <ul class="nav-links">
-            <li><a href="index.php">Home</a></li>
-            <li><a href="products.php" class="active">Products</a></li>
-            <li><a href="news.php">News</a></li>
-            <li><a href="cart.php" class="cart-icon-nav">
-                <i class="fas fa-shopping-cart"></i> 
-                <?php if(isset($_SESSION['cart'])): ?>
-                    <span class="cart-count"><?= count($_SESSION['cart']) ?></span>
-                <?php endif; ?>
-            </a></li>
-        </ul>
-    </nav>
-
-    <div class="products-container">
-        <h1 style="border-left: 5px solid #66fcf1; padding-left: 15px;">Our Technology</h1>
-        
-        <div class="product-grid">
-            <?php if(!empty($products)): ?>
-                <?php foreach($products as $product): ?>
-                    <div class="product-card">
-                       
-                        <img src="uploads/<?= htmlspecialchars($product['image']) ?>" 
-                             alt="<?= htmlspecialchars($product['title']) ?>" 
-                             class="product-image"
-                             onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
-                        
-                        <h3 class="product-title"><?= htmlspecialchars($product['title']) ?></h3>
-                        <span class="product-price">€<?= number_format($product['price'], 2) ?></span>
-                        
-                        <!-- Linku per shtim ne shporte -->
-                        <a href="add_to_cart.php?id=<?= $product['id'] ?>" class="add-cart-btn">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </a>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Nuk u gjet asnjë produkt.</p>
-            <?php endif; ?>
+    <div class="container">
+        <div class="admin-nav">
+            <div>
+                <a href="dashboard.php"><i class="fas fa-th-large"></i> Dashboard</a>
+                <a href="products.php" style="color: white; border-bottom: 2px solid #66fcf1;">Products</a>
+                <a href="news.php">News</a>
+            </div>
+            <div>
+                <span style="margin-right: 15px;"><i class="fas fa-user-shield"></i> <?= htmlspecialchars($_SESSION['user']['username']) ?></span>
+                <a href="../logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
         </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+            <h1><i class="fas fa-boxes"></i> Menaxhimi i Produkteve</h1>
+            <a href="add_product.php" class="btn-add"><i class="fas fa-plus"></i> Shto Produkt të Ri</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Imazhi</th>
+                    <th>Titulli</th>
+                    <th>Çmimi</th>
+                    <th>Veprimet</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(!empty($products)): ?>
+                    <?php foreach ($products as $p): ?>
+                    <tr>
+                        <td><?= $p['id'] ?></td>
+                        <td>
+                            <img src="../uploads/<?= htmlspecialchars($p['image']) ?>" width="60" height="60" onerror="this.src='https://via.placeholder.com/60'">
+                        </td>
+                        <td><?= htmlspecialchars($p['title']) ?></td>
+                        <td>€<?= number_format($p['price'], 2) ?></td>
+                        <td class="action-links">
+                            <a href="edit_product.php?id=<?= $p['id'] ?>" class="edit"><i class="fas fa-edit"></i> Edit</a>
+                            <a href="products.php?action=delete&id=<?= $p['id'] ?>" class="delete" onclick="return confirm('A jeni të sigurt?')"><i class="fas fa-trash"></i> Delete</a>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr><td colspan="5" style="text-align:center;">Nuk ka produkte në databazë.</td></tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
 
 </body>
