@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loginForm) {
         loginForm.addEventListener("submit", function(e) {
             if (!validateLogin()) {
-                e.preventDefault(); // Ndalon dërgimin nëse ka gabime
+                e.preventDefault(); 
             }
         });
     }
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (regForm) {
         regForm.addEventListener("submit", function(e) {
             if (!validateRegister()) {
-                e.preventDefault(); // Ndalon dërgimin nëse ka gabime
+                e.preventDefault(); 
             }
         });
     }
