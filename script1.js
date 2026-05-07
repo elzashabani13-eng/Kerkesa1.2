@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         slides[0].classList.add('active');
 
         function showSlide(index) {
-            // Largojmë klasën active nga të gjitha fotot
+           
             slides.forEach(slide => slide.classList.remove('active'));
             
             if (index >= slides.length) currentIndex = 0;
